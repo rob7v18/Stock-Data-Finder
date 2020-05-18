@@ -5,18 +5,26 @@ function displayNews(responseJson) {
   $('.results-news').empty();
   for (let i = 0; i < responseJson.length; i++){
     $('.results-news').append(
-      `<p>${responseJson[i].headline}</p>
-      <p>${responseJson[i].source}</p>
-      <p>${responseJson[i].url}</p>
-      <p>${responseJson[i].summary}</p> 
-      <img src='${responseJson[i].image}'>`
+      `<div class="newsArticle"><p><a href="${responseJson[i].url}" target="_blank" class="headlineLink">${responseJson[i].headline}</a></p>
+      <p class="source">Source: ${responseJson[i].source}</p>
+      <img src='${responseJson[i].image}' class="newsImages" alt="Image of News Headline"></div>`
     )};
+    window.location.href = '#about';
 }
 
 function displayStatistics(responseJson) {
   console.log(responseJson);
-  $('.results-statistics').empty();
-  $('.results-statistics').append(`<p>High: ${responseJson.quote.high}</p><p>Low: ${responseJson.quote.low}</p><p>Open: ${responseJson.quote.open}</p><p>Close: ${responseJson.quote.close}</p><p>Change: ${responseJson.quote.change}</p><p>Change Percent: ${responseJson.quote.changePercent}</p><p>Volume: ${responseJson.quote.volume}</p><p>Previous Volume: ${responseJson.quote.previousVolume}</p><p>52 Week High: ${responseJson.quote.week52High}</p><p>52 Week Low: ${responseJson.quote.week52Low}</p>`);
+  $('.high').empty();
+  $('.high').text(`${responseJson.quote.high}`);
+  $('.low').text(`${responseJson.quote.low}`);
+  $('.open').text(`${responseJson.quote.open}`);
+  $('.close').text(`${responseJson.quote.close}`);
+  $('.change').text(`${responseJson.quote.change}`);
+  $('.changePercent').text(`${responseJson.quote.changePercent}`);
+  $('.volume').text(`${responseJson.quote.volume}`);
+  $('.previousVolume').text(`${responseJson.quote.previousVolume}`);
+  $('.52WeekHigh').text(`${responseJson.quote.week52High}`);
+  $('.52WeekLow').text(`${responseJson.quote.week52Low}`);
 }
 
 function displayCompanyInfo(responseJson) {
@@ -30,14 +38,13 @@ function displaySectorPerformance(responseJson) {
   console.log(responseJson);
   $('.results-sectPerformance').empty();
   for (let i = 0; i < entries.length; i++){
-    $('.results-sectPerformance').append(`<p>${entries[i][0]}: ${entries[i][1]}</p>`);
+    $('.results-sectPerformance').append(`<li>${entries[i][0]}: <span>${entries[i][1]}</span></li>`);
   };
 }
 
 function getNews(ticker) {
   let urlNews = `https://cloud.iexapis.com/v1/stock/${ticker}/news/last?token=pk_f129351ba976411a9a6c62e3560d510c`;
   console.log(urlNews);
-
   fetch(urlNews)
    .then(response => {
      if (response.ok) {
@@ -52,10 +59,10 @@ function getNews(ticker) {
 function getStatistics(ticker) {
   let urlStats = `https://cloud.iexapis.com/v1/stock/${ticker}/book?token=pk_f129351ba976411a9a6c62e3560d510c`;
   console.log(urlStats);
-
   fetch(urlStats)
    .then(response => {
      if (response.ok) {
+       getSectorPerformance();
        return response.json();
      }
      throw new Error(response.statusText);
@@ -67,7 +74,6 @@ function getStatistics(ticker) {
 function getCompany(ticker) {
   let urlCompany = `https://cloud.iexapis.com/v1/stock/${ticker}/company?token=pk_f129351ba976411a9a6c62e3560d510c`;
   console.log(urlCompany);
-
   fetch(urlCompany)
    .then(response => {
      if (response.ok) {
@@ -82,7 +88,6 @@ function getCompany(ticker) {
 function getSectorPerformance() {
     let urlSectorPerformance = 'https://www.alphavantage.co/query?function=SECTOR&apikey=apiKey_ALPHA';
     console.log(urlSectorPerformance);
-  
     fetch(urlSectorPerformance)
       .then(response => {
         if (response.ok) {
@@ -95,10 +100,10 @@ function getSectorPerformance() {
   }
 
 function watchForm() {
-  $('form').submit(event => {
+  $('form').on('click', '.search', function (event) {
     event.preventDefault();
+    $('.hidden').removeClass();
     const searchTicker = $('#js-search-ticker').val();
-    getSectorPerformance();
     getCompany(searchTicker);
     getStatistics(searchTicker);
     getNews(searchTicker);
