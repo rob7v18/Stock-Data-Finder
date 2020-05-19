@@ -16,7 +16,7 @@ main {
 }
 
 .container {
-  background-image: linear-gradient(to top, rgb(7, 7, 8, 1), rgb(72, 73, 73, .8)), url('/images/bp2.jpg');
+  background-image: linear-gradient(to top, rgb(7, 7, 8, 1), rgb(72, 73, 73, .8)), url('images/bp2.jpg');
   backdrop-filter: blur(1px);
   background-repeat: no-repeat;
   background-size: cover;
