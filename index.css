@@ -118,7 +118,7 @@ span{
 }
 
 .newsHeader {
-  margin: 1em 0 -1em 2em;
+  margin: 1em 0 1em 0;
   text-align: left;
 }
 
@@ -148,8 +148,13 @@ span{
   margin: 2em 0 3em 0;
 }
 
-.error-message {
+.error-results {
+    display: block;
     color: red;
+    font-style: italic;
+    margin: 1em auto;
+    max-width: 75%;
+    text-align: center;
 }
 
 .hidden {
@@ -195,7 +200,13 @@ span{
   }
 
   .newsHeader {
+    margin: 1em 0 -1em 2em;
+    text-align: left;
+  }
+
+  .newsHeader {
     text-align: center;
+    margin: -2em auto 0 auto;
   }
 
   .newsImages {
